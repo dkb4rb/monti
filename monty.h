@@ -5,6 +5,9 @@
 #define BUFFSIZE 1024
 #define DELIMITS "\t\b\a\n"
 
+#define STACK 0
+#define QUEUE 1
+
 /** GLOBAL OPCODE TOKEN */
 extern char **op_token;
 
@@ -20,6 +23,10 @@ extern char **op_token;
 #include <linux/limits.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -51,12 +58,31 @@ typedef struct instruction_s
     void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+#define _GNU_SOURCE
+#define _POSIX_C_SOURCE 200809L
+
+/* ERRORS CASES */
 int Bad_usage(void);
 int malloc_err(void);
 int fd_open_err(char *fd);
 int Uknw_op_err(char *code, unsigned int line_number);
 int no_int_err(void);
 
-int run_mounty(char *fd_scriptor);
+/* OPCODES MONTY FUNTIONS */
+void _push(stack_t **stack, unsigned int num_line);
+void _pall(stack_t **stack, unsigned int num_line);
 
+/* FUNCTIONS STACKS */
+int run_mounty(FILE *fd_scriptor);
+int stack_init(stack_t **stack);
+int get_mode(stack_t *stack);
+int free_stack(stack_t **stack);
+
+char **strtow(char *str, char *delims);
+int is_delim(char ch, char *delims);
+int get_word_length(char *str, char *delims);
+int get_word_count(char *str, char *delims);
+char *get_next_word(char *str, char *delims);
+
+int empty_line(char *line, char *delims);
 #endif /* MONTY_H */

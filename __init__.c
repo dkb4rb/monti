@@ -15,13 +15,10 @@ int main(int argc, char **argv)
 
     fd_scriptor = fopen(argv[1], "r");
 
-    /** ESTA ES EL CONTADOR DE ARGV*/
-    printf("\nEl valor de los argc es ---> %d\n\n", argc);
-
     if (fd_scriptor == NULL)
         return (fd_open_err(argv[1]));
 
-    success_code = run_mounty(argv[1]);
+    success_code = run_mounty(fd_scriptor);
     fclose(fd_scriptor);
     return (success_code);
 }
